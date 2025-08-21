@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smile_ai/models/design.dart';
+import 'package:smile_ai/views/components/design_card.dart';
 import 'package:smile_ai/views/pages/create_design.dart';
 import 'package:smile_ai/views/pages/setting.dart';
 
@@ -164,46 +166,11 @@ class HomeScreen extends StatelessWidget {
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
-                  itemCount: 6,
+                  itemCount: fakeDesignData.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: colorScheme.secondary.withOpacity(0.05),
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: colorScheme.secondary.withOpacity(0.2),
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.image, size: 48),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "Prompt ${index + 1}",
-                            style: TextStyle(
-                              color: colorScheme.onBackground,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            "Quick description",
-                            style: TextStyle(
-                              color: colorScheme.secondary,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    final design = fakeDesignData[index];
+                    // design cards hre
+                    return DesignCard(design: design);
                   },
                 ),
               ],
