@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smile_ai/models/category.dart';
 import 'package:smile_ai/models/design.dart';
+import 'package:smile_ai/models/prompt.dart';
 import 'package:smile_ai/views/components/design_card.dart';
+import 'package:smile_ai/views/components/highlight_card.dart';
 import 'package:smile_ai/views/pages/create_design.dart';
 import 'package:smile_ai/views/pages/setting.dart';
 
@@ -56,43 +59,12 @@ class HomeScreen extends StatelessWidget {
                 /// Highlights Carousel
                 SizedBox(
                   height: 160,
-                  child: ListView.separated(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemCount: promptList.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        width: 280,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: colorScheme.primary,
-                        ),
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Featured Prompt ${index + 1}",
-                              style: TextStyle(
-                                color: colorScheme.onPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                "Try Now →",
-                                style: TextStyle(
-                                  color: colorScheme.onPrimary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      Prompt prompt = promptList[index];
+                      return HighlightCard(prompt: prompt,);
                     },
                   ),
                 ),
@@ -110,31 +82,25 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 SizedBox(
                   height: 40,
-                  child: ListView.separated(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 6,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemCount: categories.length,
                     itemBuilder: (context, index) {
-                      final categories = [
-                        "Abstract",
-                        "Portraits",
-                        "Landscapes",
-                        "Minimal",
-                        "Futuristic",
-                        "Cultural",
-                      ];
+                      Category category = categories[index];
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: colorScheme.secondary.withOpacity(0.1),
+                          color: category.bgColor != null
+                              ? category.bgColor
+                              : colorScheme.secondary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
                           child: Text(
-                            categories[index],
+                            category.name,
                             style: TextStyle(
                               color: colorScheme.onBackground,
                               fontSize: 14,
