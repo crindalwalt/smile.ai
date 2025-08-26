@@ -15,7 +15,7 @@ List<Category> categories = [
   Category(name: "Minimal", bgColor: Colors.lightBlue),
   Category(name: "Futuristic"),
   Category(name: "Cultural"),
-  Category(name: "Abstract", bgColor: Colors.blueGrey),
+  Category(name: "Abstract"),
   Category(name: "Portraits"),
   Category(name: "Landscapes"),
 ];

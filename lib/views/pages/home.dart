@@ -32,9 +32,7 @@ class HomeScreen extends StatelessWidget {
             child: IconButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SettingsProfilePage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => SettingProfilePage()),
                 );
               },
               icon: Icon(Icons.settings),
@@ -64,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                     itemCount: promptList.length,
                     itemBuilder: (context, index) {
                       Prompt prompt = promptList[index];
-                      return HighlightCard(prompt: prompt,);
+                      return HighlightCard(prompt: prompt);
                     },
                   ),
                 ),

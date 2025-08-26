@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smile_ai/providers/theme_provider.dart';
 
-class SettingsProfilePage extends StatelessWidget {
-  const SettingsProfilePage({super.key});
+// main class
+class SettingProfilePage extends StatefulWidget {
+  @override
+  State<SettingProfilePage> createState() {
+    return _SettingProfilePageState();
+  }
+}
 
+// state class
+class _SettingProfilePageState extends State<SettingProfilePage> {
+  bool isDark = false;
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -95,8 +106,13 @@ class SettingsProfilePage extends StatelessWidget {
                       Icons.dark_mode,
                       color: theme.colorScheme.primary,
                     ),
-                    value: false,
-                    onChanged: (val) {},
+                    value: themeProvider.mode == ThemeMode.light ? false : true,
+                    onChanged: (val) {
+                      setState(() {
+                        print("switch if $val");
+                        themeProvider.changeTheme(val);
+                      });
+                    },
                   ),
                   Divider(color: theme.colorScheme.secondary.withOpacity(0.3)),
                   SwitchListTile(
