@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:smile_ai/views/pages/email_verification.dart';
 import 'package:smile_ai/views/pages/register.dart';
@@ -9,12 +10,15 @@ class LoginScreen extends StatelessWidget {
 
   TextEditingController _passwordController = TextEditingController();
 
-  void submitLoginForm() {
+  void submitLoginForm({required BuildContext context}) {
     print("form is being submitted ...");
-
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Submitting the form")));
     // submit the form
     if (_formKey.currentState!.validate()) {
       print("form is submitted");
+
       print("Email: ${_emailController.text}");
 
       print("password: ${_passwordController.text}");
@@ -54,6 +58,15 @@ class LoginScreen extends StatelessWidget {
                 // Email Field
                 TextFormField(
                   controller: _emailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Field is required";
+                    }
+                    if (!EmailValidator.validate(value)) {
+                      return "Email is invalid";
+                    }
+                    return null;
+                  },
                   style: TextStyle(color: colors.onSurface),
                   decoration: InputDecoration(
                     labelText: "Email",
@@ -79,6 +92,38 @@ class LoginScreen extends StatelessWidget {
                 // Password Field
                 TextFormField(
                   controller: _passwordController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Password is required";
+                    }
+
+                    if (value.length < 8) {
+                      return "Password should be 8 characters";
+                    }
+                    // At least one uppercase letter
+                    if (!RegExp(r'^(?=.*[A-Z])').hasMatch(value)) {
+                      return "Password must contain at least one uppercase letter";
+                    }
+
+                    // At least one lowercase letter
+                    if (!RegExp(r'^(?=.*[a-z])').hasMatch(value)) {
+                      return "Password must contain at least one lowercase letter";
+                    }
+
+                    // At least one number
+                    if (!RegExp(r'^(?=.*\d)').hasMatch(value)) {
+                      return "Password must contain at least one number";
+                    }
+
+                    // At least one special character
+                    if (!RegExp(
+                      r'^(?=.*[!@#$%^&*(),.?":{}|<>])',
+                    ).hasMatch(value)) {
+                      return "Password must contain at least one special character";
+                    }
+
+                    return null;
+                  },
                   style: TextStyle(color: colors.onSurface),
                   decoration: InputDecoration(
                     labelText: "Password",
@@ -119,7 +164,9 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: submitLoginForm,
+                    onPressed: () {
+                      submitLoginForm(context: context);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colors.primary,
                       foregroundColor: colors.onPrimary,
