@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smile_ai/providers/authentication_provider.dart';
 import 'package:smile_ai/providers/theme_provider.dart';
 import 'package:smile_ai/views/pages/onboarding.dart';
 import 'package:smile_ai/views/theme/primary_theme.dart';
@@ -12,7 +13,10 @@ class SmileAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => ThemeProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
+      ],
       child: RootApp(),
     );
   }

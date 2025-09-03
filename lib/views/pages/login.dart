@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smile_ai/providers/authentication_provider.dart';
 import 'package:smile_ai/views/pages/email_verification.dart';
 import 'package:smile_ai/views/pages/register.dart';
 
@@ -17,11 +19,20 @@ class LoginScreen extends StatelessWidget {
     ).showSnackBar(SnackBar(content: Text("Submitting the form")));
     // submit the form
     if (_formKey.currentState!.validate()) {
+      final authenticationProvider = Provider.of<AuthenticationProvider>(
+        context,
+        listen: false,
+      );
       print("form is submitted");
 
       print("Email: ${_emailController.text}");
 
       print("password: ${_passwordController.text}");
+
+      authenticationProvider.loginToAccount(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
     }
   }
 
