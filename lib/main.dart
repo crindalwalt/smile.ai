@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smile_ai/providers/authentication_provider.dart';
@@ -6,6 +7,8 @@ import 'package:smile_ai/views/pages/onboarding.dart';
 import 'package:smile_ai/views/theme/primary_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(SmileAi());
 }
 
