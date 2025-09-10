@@ -6,9 +6,9 @@ import 'package:smile_ai/providers/theme_provider.dart';
 import 'package:smile_ai/views/pages/onboarding.dart';
 import 'package:smile_ai/views/theme/primary_theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(SmileAi());
 }
 
