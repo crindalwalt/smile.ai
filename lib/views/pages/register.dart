@@ -1,5 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smile_ai/providers/authentication_provider.dart';
+import 'package:smile_ai/views/pages/home.dart';
 import 'package:smile_ai/views/pages/login.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -9,7 +12,12 @@ class RegisterScreen extends StatelessWidget {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
-  void onRegister({required BuildContext context}) {
+  // * function to run on registerration form
+  void onRegister({required BuildContext context}) async {
+    final authProvider = Provider.of<AuthenticationProvider>(
+      context,
+      listen: false,
+    );
     print("signup button is pressed ...");
     if (_formKey.currentState!.validate()) {
       print("form request is validated ...");
@@ -24,10 +32,36 @@ class RegisterScreen extends StatelessWidget {
       print("✅ Password : $passwordValue");
       print("✅ Confirm Password : $confirmPasswordValue");
 
+      // sending data to the provider
+      final bool registerUser = await authProvider.registerAccount(
+        name: nameValue,
+        email: emailValue,
+        password: passwordValue,
+      );
+
+      if (!registerUser) {
+        // account creation failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Registration Failed ,Try again"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        // account creation successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Registration Successful"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // redirecting to the home screen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+
       // showing snackbar
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Creating your account")));
     } else {
       print("form request is bounced ...");
     }
