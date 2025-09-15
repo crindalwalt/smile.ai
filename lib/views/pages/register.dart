@@ -18,19 +18,13 @@ class RegisterScreen extends StatelessWidget {
       context,
       listen: false,
     );
-    print("signup button is pressed ...");
+
     if (_formKey.currentState!.validate()) {
-      print("form request is validated ...");
+      // recieving data from form upon submission
       final nameValue = _nameController.text;
       final emailValue = _emailController.text;
       final passwordValue = _passwordController.text;
       final confirmPasswordValue = _confirmPasswordController.text;
-
-      print("Here is the data from the Signup form");
-      print("✅ Name : $nameValue");
-      print("✅ Email : $emailValue");
-      print("✅ Password : $passwordValue");
-      print("✅ Confirm Password : $confirmPasswordValue");
 
       // sending data to the provider
       final bool registerUser = await authProvider.registerAccount(

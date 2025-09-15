@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,16 +24,24 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   // method for login
-  void loginToAccount({required String email, required String password}) {
-    print("data has been reached to the provider");
-    print("email: $email");
-    print("password: $password");
-    // firebase integration
+  Future<bool> loginToAccount({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final UserCredential login = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+
   }
 
   // method for logout
   void logoutFromAccount() async {
-    print("logging out ....");
-    final logout = await _auth.signOut();
+    await _auth.signOut();
   }
 }

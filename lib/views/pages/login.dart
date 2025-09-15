@@ -1,38 +1,66 @@
+import 'dart:math';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smile_ai/providers/authentication_provider.dart';
 import 'package:smile_ai/views/pages/email_verification.dart';
+import 'package:smile_ai/views/pages/home.dart';
 import 'package:smile_ai/views/pages/register.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() {
+    return _LoginScreenState();
+  }
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
 
   TextEditingController _passwordController = TextEditingController();
 
-  void submitLoginForm({required BuildContext context}) {
-    print("form is being submitted ...");
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Submitting the form")));
+  void submitLoginForm({required BuildContext context}) async {
     // submit the form
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
       final authenticationProvider = Provider.of<AuthenticationProvider>(
         context,
         listen: false,
       );
-      print("form is submitted");
 
-      print("Email: ${_emailController.text}");
-
-      print("password: ${_passwordController.text}");
-
-      authenticationProvider.loginToAccount(
+      final login = await authenticationProvider.loginToAccount(
         email: _emailController.text,
         password: _passwordController.text,
       );
+      setState(() {
+        isLoading = false;
+      });
+      if (login) {
+        // if login was successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Login Sucessfully"),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        // if login was failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("User not found"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -108,31 +136,6 @@ class LoginScreen extends StatelessWidget {
                       return "Password is required";
                     }
 
-                    if (value.length < 8) {
-                      return "Password should be 8 characters";
-                    }
-                    // At least one uppercase letter
-                    if (!RegExp(r'^(?=.*[A-Z])').hasMatch(value)) {
-                      return "Password must contain at least one uppercase letter";
-                    }
-
-                    // At least one lowercase letter
-                    if (!RegExp(r'^(?=.*[a-z])').hasMatch(value)) {
-                      return "Password must contain at least one lowercase letter";
-                    }
-
-                    // At least one number
-                    if (!RegExp(r'^(?=.*\d)').hasMatch(value)) {
-                      return "Password must contain at least one number";
-                    }
-
-                    // At least one special character
-                    if (!RegExp(
-                      r'^(?=.*[!@#$%^&*(),.?":{}|<>])',
-                    ).hasMatch(value)) {
-                      return "Password must contain at least one special character";
-                    }
-
                     return null;
                   },
                   style: TextStyle(color: colors.onSurface),
@@ -186,7 +189,11 @@ class LoginScreen extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text("Login"),
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          )
+                        : Text("Login"),
                   ),
                 ),
 
