@@ -28,4 +28,10 @@ class AuthenticationProvider extends ChangeNotifier {
     print("password: $password");
     // firebase integration
   }
+
+  // method for logout
+  void logoutFromAccount() async {
+    print("logging out ....");
+    final logout = await _auth.signOut();
+  }
 }

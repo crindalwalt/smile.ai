@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smile_ai/providers/authentication_provider.dart';
 import 'package:smile_ai/providers/theme_provider.dart';
+import 'package:smile_ai/views/pages/login.dart';
 
 // main class
 class SettingProfilePage extends StatefulWidget {
@@ -13,8 +15,11 @@ class SettingProfilePage extends StatefulWidget {
 // state class
 class _SettingProfilePageState extends State<SettingProfilePage> {
   bool isDark = false;
+
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthenticationProvider>(context);
+
     final themeProvider = Provider.of<ThemeProvider>(context);
     final theme = Theme.of(context);
     return Scaffold(
@@ -137,7 +142,22 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                       "Logout",
                       style: TextStyle(color: theme.colorScheme.onBackground),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      // logging out
+
+                      auth.logoutFromAccount();
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Logout successfully "),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
                   ),
                 ],
               ),

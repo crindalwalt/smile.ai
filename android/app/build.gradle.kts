@@ -11,7 +11,7 @@ plugins {
 android {
     namespace = "com.example.smile_ai"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = 23
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
