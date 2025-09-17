@@ -19,7 +19,10 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthenticationProvider>(context);
-
+    final isEmailVerified = auth.checkEmailVerification();
+    final username = auth.user!.displayName;
+    final userEmail = auth.user!.email;
+    print(isEmailVerified);
     final themeProvider = Provider.of<ThemeProvider>(context);
     final theme = Theme.of(context);
     return Scaffold(
@@ -56,7 +59,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Shahzad Farooq",
+                        username == null ? "User" : username,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -64,7 +67,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                         ),
                       ),
                       Text(
-                        "shahzad@example.com",
+                        userEmail!,
                         style: TextStyle(
                           fontSize: 14,
                           color: theme.colorScheme.secondary,
@@ -102,6 +105,44 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
               elevation: 1,
               child: Column(
                 children: [
+                  isEmailVerified
+                      ? SizedBox()
+                      : Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: theme.colorScheme.error,
+                              width: 3,
+                              style: BorderStyle.solid,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(255, 137, 88, 85),
+                          ),
+                          child: ListTile(
+                            leading: IconButton(
+                              onPressed: () {
+                                auth.sendEmailVerficationLink();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Email verification link send to your email",
+                                    ),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.email,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                            title: Text("Please Verify your email"),
+                            subtitle: Text(
+                              "Click on the email icons to resend the confirmation email",
+                            ),
+                          ),
+                        ),
                   SwitchListTile(
                     title: Text(
                       "Dark Mode",

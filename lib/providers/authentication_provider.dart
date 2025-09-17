@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user;
   //method for register
   Future<bool> registerAccount({
     required String name,
@@ -20,6 +19,8 @@ class AuthenticationProvider extends ChangeNotifier {
       return false;
     }
 
+    this.user = registering.user!;
+
     return true;
   }
 
@@ -33,15 +34,25 @@ class AuthenticationProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
+      this.user = login.user!;
       return true;
     } catch (e) {
       return false;
     }
+  }
 
+  bool checkEmailVerification() {
+    bool isVerfied = user!.emailVerified;
+    return isVerfied;
+  }
+
+  void sendEmailVerficationLink () async {
+    await user!.sendEmailVerification();
   }
 
   // method for logout
   void logoutFromAccount() async {
+    this.user = null;
     await _auth.signOut();
   }
 }
